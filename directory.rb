@@ -40,8 +40,8 @@ end
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
-  puts "3. Save the list to students.csv"
-  puts "4. Load the list from students.csv"
+  puts "3. Save student list to file"
+  puts "4. Load students from another file"
   puts "9. Exit"
 end
 
@@ -58,9 +58,13 @@ def process(selection)
     when "2"
       show_students
     when "3"
-      save_students
+      puts "Please specify a file to save to..."
+      file = STDIN.gets.chomp
+      save_students(file)
     when "4"
-      load_students
+      puts "Please specify a file to load from..."
+      file = STDIN.gets.chomp
+      load_students(file)
     when "9"
       exit
     else
@@ -68,34 +72,34 @@ def process(selection)
   end
 end
 
-def save_students
+def save_students(file)
   #open the file for writing
-  file = File.open("students.csv", "w")
+  open_file = File.open(file, "w")
   #iterate over the array of students
   @students.each do |student|
     student_data = [student[:name], student[:cohort]]
     csv_line = student_data.join(",")
-    file.puts csv_line
+    open_file.puts csv_line
   end
-  file.close
-  puts "***Records saved successfully!***"
+  open_file.close
+  puts "*** Records saved successfully to #{file} ***"
 end
 
-def load_students(filename = "students.csv")
-  file = File.open(filename, "r")
-  file.readlines.each do |line|
+def load_students(file = "students.csv")
+  open_file = File.open(file, "r")
+  open_file.readlines.each do |line|
   name, cohort = line.chomp.split(",")
     add_students(name, cohort)
   end
-  file.close
-  puts "***Records loaded successfully!***"
+  open_file.close
+  puts "*** #{file} loaded successfully ***"
 end
 
-def file_to_load # loads file passed from command line, else defaults to students.csv
-  filename = ARGV.first # first argument from the command line
-  filename = "students.csv" if filename.nil?
-  load_students(filename)
-  puts "Loaded #{@students.count} students from #{filename}"
+def file_on_load # loads file passed from command line, else defaults to students.csv
+  file = ARGV.first # first argument from the command line
+  file = "students.csv" if file.nil?
+  load_students(file)
+  puts "Loaded #{@students.count} students from #{file}"
 end
 
 def interactive_menu
@@ -105,5 +109,5 @@ def interactive_menu
   end
 end
 
-file_to_load
+file_on_load
 interactive_menu
