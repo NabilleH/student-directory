@@ -15,6 +15,7 @@ def input_students
     #get another name from the user
     name = gets.chomp
   end
+  puts "***Students entered successully!***"
 end
 
 def add_students(name, cohort)
@@ -77,18 +78,20 @@ def save_students
     file.puts csv_line
   end
   file.close
+  puts "***Records saved successfully!***"
 end
 
-def load_students(filename)
+def load_students(filename = "students.csv")
   file = File.open(filename, "r")
   file.readlines.each do |line|
   name, cohort = line.chomp.split(",")
     add_students(name, cohort)
   end
   file.close
+  puts "***Records loaded successfully!***"
 end
 
-def try_load_students
+def file_to_load # loads file passed from command line, else defaults to students.csv
   filename = ARGV.first # first argument from the command line
   filename = "students.csv" if filename.nil?
   load_students(filename)
@@ -102,5 +105,5 @@ def interactive_menu
   end
 end
 
-try_load_students
+file_to_load
 interactive_menu
