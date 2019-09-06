@@ -1,6 +1,7 @@
 @students = [] # an empty array accessible to all methods
 
 def input_students
+  cohort = "november" # Passing to add_students along with names specified. Will change this by prompting user for input.
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
   #gets the first name
@@ -8,11 +9,16 @@ def input_students
   #while the name is not empty, repeat this code
   while !name.empty? do
     #add the student hash to the students array
-    @students << {name: name, cohort: :november}
+    #@students << {name: name, cohort: :november}
+    add_students(name, cohort)
     puts "Now we have #{@students.count} students"
     #get another name from the user
     name = gets.chomp
   end
+end
+
+def add_students(name, cohort)
+  @students << {name: name, cohort: cohort.to_sym}
 end
 
 def print_header
@@ -77,7 +83,7 @@ def load_students(filename = "students.csv")
   file = File.open(filename, "r")
   file.readlines.each do |line|
   name, cohort = line.chomp.split(",")
-    @students << {name: name, cohort: cohort.to_sym}
+    add_students(name, cohort)
   end
   file.close
 end
