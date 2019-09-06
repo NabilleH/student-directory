@@ -74,24 +74,24 @@ end
 
 def save_students(file)
   #open the file for writing
-  open_file = File.open(file, "w")
-  #iterate over the array of students
-  @students.each do |student|
+  File.open(file, "w") do |open_file|
+    #iterate over the array of students
+    @students.each do |student|
     student_data = [student[:name], student[:cohort]]
     csv_line = student_data.join(",")
     open_file.puts csv_line
+    end
   end
-  open_file.close
   puts "*** Records saved successfully to #{file} ***"
 end
 
 def load_students(file = "students.csv")
-  open_file = File.open(file, "r")
-  open_file.readlines.each do |line|
-  name, cohort = line.chomp.split(",")
+  File.open(file, "r") do |open_file|
+    open_file.readlines.each do |line|
+    name, cohort = line.chomp.split(",")
     add_students(name, cohort)
+    end
   end
-  open_file.close
   puts "*** #{file} loaded successfully ***"
 end
 
